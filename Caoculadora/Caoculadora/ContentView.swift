@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Caoculadora
 //
-//  Created by Pedro Henrique Nunes da Silveira Bezerra on 07/05/24.
+//  Created by Keine Vitor de Santana on 07/05/24.
 //
 
 import SwiftUI
@@ -12,80 +12,99 @@ struct ContentView: View {
     @State var years: Int?
     @State var months: Int?
     @State var result: Int?
-   
-        
-        let portes = ["Pequeno", "Médio", "Grande"]
-        @State var porteSelecionado = "Pequeno"
-        
-        var body: some View {
-        VStack(alignment: .leading) {
-            Spacer(minLength: 0)
+    
+    let portes = ["Pequeno", "Médio", "Grande"]
+    @State var porteSelecionado = "Pequeno"
+    @State var porteSelected = Porte.pequeno
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 24) {
             Text("Qual a idade do seu cão?")
+                .font(.header5)
             Text("Anos")
+                .font(.body1)
             TextField("Quantos anos completos tem seu cão?",
                       value: $years,
                       format: .number)
+            
             Text("Meses")
+                .font(.body1)
             TextField("Quantos meses tem seu cão?", value: $months, format: .number)
-            Spacer(minLength: 0)
+                
+            
             Text("Porte")
             
-            //aqui vai o segmented control
-            Picker("Portes", selection: $porteSelecionado){
-                ForEach(portes, id:\.self) { porte in Text(porte)
+            Picker("Portes", selection: $porteSelected){
+                ForEach(Porte.allCases, id:\.self) { porte in Text(porte.rawValue.capitalized)
                 }
             }
             .pickerStyle(.segmented)
+            
+            Divider()
+            
+            Spacer()
+            
             if let result {
                 Text("Seu cachorro tem, em idade humana...")
-                Text("\(result)")
-            }else{
-                Spacer(minLength: 0)
+                    .font(.body1)
+                Text("\(result) anos")
+                    .font(.display)
+            } else {
                 Image(ImageResource.clarinha)
-                
                     .resizable()
                     .scaledToFit()
-                    .frame(maxWidth: 198, maxHeight: 198.4)
-                    .padding(.horizontal, 70)
-                    .shadow(radius: 40)
+                    .frame(maxHeight: 150)
+                    .frame(maxWidth: .infinity)
+                    .shadow(radius: 10)
             }
             
-            Spacer(minLength: 0)
+            Spacer()
+            
             Button("Cãocular", action: processYears)
-            
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .background(.indigo)
-                .foregroundStyle(.white)
-                .clipShape(.rect(cornerRadius: 10))
-                .bold()
-            
-            
+            .frame(maxWidth: .infinity)
+            .frame(maxHeight: 50)
+            .background(.indigo)
+            .foregroundStyle(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .bold()
+            .font(.body1)
         }
         .textFieldStyle(.roundedBorder)
         .keyboardType(.numberPad)
         .padding()
     }
     
-    func processYears(){
-        print("cãocular")
+    func processYears() { //a funçao recebe nada e retorna void
+        print("Cãocular")
         
         guard let years, let months else {
-            print("campos preenchidos")
+            print("campo não preenchido")
+            return
+            
+        }
+        
+        guard months > 0 || years > 0 else{
+            print("pelo menos um campo tem que ser maior que zero")
             return
         }
-        guard months > 0 || years > 0 else {
-            print("pelo menos um campo deve ser maior que zero")
-            return
+        
+        // o resultado vai ser anos * multiplicador + a fraçao do ano em meses * multiplicador
+        //multiplicador: pequeno - 6, médio - 7 e grande - 8
+        let multiplicador: Int
+        switch porteSelected {
+        case .pequeno:
+            multiplicador = 6
+        case .médio:
+            multiplicador = 7
+        case .grande:
+            multiplicador = 8
         }
-        result = years * 7 + months * 7/12
+        
+        result =  years * multiplicador + months * multiplicador / 12
+
         
     }
-    
-    
 }
-
-
 
 #Preview {
     ContentView()

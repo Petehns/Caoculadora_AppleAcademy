@@ -6,3 +6,9 @@
 //
 
 import Foundation
+enum Porte: String, CaseIterable{
+    case pequeno = "Pequeno"
+    case médio = "Média"
+    case grande = "Grande"
+    
+}
