@@ -33,7 +33,7 @@ struct ContentView: View {
                 
             
             Text("Porte")
-            
+                .font(.body1)
             Picker("Portes", selection: $porteSelected){
                 ForEach(Porte.allCases, id:\.self) { porte in Text(porte.rawValue.capitalized)
                 }
@@ -87,20 +87,9 @@ struct ContentView: View {
             print("pelo menos um campo tem que ser maior que zero")
             return
         }
+      
         
-        // o resultado vai ser anos * multiplicador + a fraçao do ano em meses * multiplicador
-        //multiplicador: pequeno - 6, médio - 7 e grande - 8
-        let multiplicador: Int
-        switch porteSelected {
-        case .pequeno:
-            multiplicador = 6
-        case .médio:
-            multiplicador = 7
-        case .grande:
-            multiplicador = 8
-        }
-        
-        result =  years * multiplicador + months * multiplicador / 12
+        result =  porteSelected
 
         
     }
