@@ -17,6 +17,8 @@ struct ContentView: View {
     let portes = ["Pequeno", "Médio", "Grande"]
     @State var porteSelecionado = "Pequeno"
     @State var porteSelected = Porte.pequeno
+    @State var failedInput = false
+    let tituloPreencherCampos = "Preencha os campos para cãocular!"
     
     var body: some View {
         
@@ -90,8 +92,11 @@ struct ContentView: View {
                 .keyboardType(.numberPad)
                 .padding()
                 .containerRelativeFrame(.vertical)
+                .animation(.easeInOut.speed(0.5), value: result)
             }
-            
+            .alert(tituloPreencherCampos, isPresented: $failedInput, actions: {
+                Button("OK", role: .cancel, action: {})
+            })
             
             
             .navigationTitle("Cãoculadora")
@@ -109,6 +114,7 @@ extension ContentView {
         
         guard let years, let months else {
             print("campo não preenchido")
+            failedInput = true
             return
             
         }
@@ -118,8 +124,10 @@ extension ContentView {
             return
         }
         
+        withAnimation(.easeInOut.speed(0.5)){
+            result = porteSelected.calcularIdade(deAnos: years, eMeses: months)
+        }
         
-        result = porteSelected.calcularIdade(deAnos: years, eMeses: months)
         
         
     }
