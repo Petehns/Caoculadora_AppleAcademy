@@ -1,5 +1,5 @@
 //
-//  styleguide.swift
+//  StyleGuide.swift
 //  Caoculadora
 //
 //  Created by Pedro Henrique Nunes da Silveira Bezerra on 13/05/24.
